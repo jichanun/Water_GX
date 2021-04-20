@@ -18,7 +18,7 @@ void LEDControl(u8 judge)
 {
 	if (judge=='C')
 	{
-		    osDelay(2000);
+		    osDelay(1000);
 		for (int j =0;j<6;j++)
 		{
 				if (j%2)
@@ -41,7 +41,7 @@ void LEDControl(u8 judge)
 	}
 	else if (judge=='S')
 	{
-		    osDelay(2000);
+		    osDelay(1000);
 		for (int j =0;j<6;j++)
 		{
 				if (j%2)

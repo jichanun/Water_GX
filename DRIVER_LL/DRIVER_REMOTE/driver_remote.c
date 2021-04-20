@@ -147,6 +147,10 @@ RemoteDataProcessedStruct RemoteDataProcess(RemoteDataUnion RemoteDataRaw)
 	RemoteDataProcessed.KeyB	=	RemoteDataRaw.RemoteDataProcessed.Key.KeyB;
 	
 	RemoteDataProcessed.FlagValidity=1;
+	RemoteDataClear();
+	//复位
+	RemoteDataRaw.RemoteDataProcessed.RCValue.s2=RemoteDataProcessed.LeftSwitch ;
+	RemoteDataRaw.RemoteDataProcessed.RCValue.s1=RemoteDataProcessed.RightSwitch;
 	return RemoteDataProcessed;
 }
 

@@ -411,6 +411,7 @@ RemoteDataPortStruct KeyboardModeProcessData(RemoteDataProcessedStruct	RemoteDat
 	return RemoteDataPortTemp;
 }
 extern int RollSinkControl;
+extern u8 GimbalInitFlag;
 
 RemoteDataPortStruct AutoModeProcessData(RemoteDataProcessedStruct	RemoteDataReceive)
 {
@@ -445,7 +446,7 @@ RemoteDataPortStruct AutoModeProcessData(RemoteDataProcessedStruct	RemoteDataRec
 }
 extern VisionDataStruct VisionData;
   int  ReceiveCount=0;
-
+extern  int RemoteLostCount;
 RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataReceive)
 {
 	static  int  ReceiveCount=0;
@@ -466,39 +467,51 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	{
 		ReceiveCount++;
 	}
-	if (ReceiveCount>100)
+	if (ReceiveCount>20)
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.Friction=ENABLE;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.7;
 	}
-	if (ReceiveCount>500)
+	if (ReceiveCount>100)
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.FeedMotor=ENABLE;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
 	}
-	if (ReceiveCount>2000)
+	if (ReceiveCount>500)
 	{
 		ReceiveCount=0;
 		RemoteDataPortTemp.Friction=DISABLE;
 		RemoteDataPortTemp.FeedMotor=DISABLE;
 	}
-//	switch(RemoteDataReceive.RightSwitch)
-//		
-//	{
-//		case 1:RemoteDataPortTemp.Friction=DISABLE;
+	switch(RemoteDataReceive.RightSwitch)
+	{
+		case 1:
+//			RemoteDataPortTemp.Friction=DISABLE;
 //					RemoteDataPortTemp.FeedMotor=DISABLE;
-//					
-//			break;
-//		case 2:RemoteDataPortTemp.Friction=ENABLE;
+					
+			break;
+		case 2:
+//			RemoteDataPortTemp.Friction=ENABLE;
 //					RemoteDataPortTemp.FeedMotor=ENABLE;
-//			break;
-//		case 3:RemoteDataPortTemp.Friction=ENABLE;
-//					RemoteDataPortTemp.FeedMotor=DISABLE;
+						GimbalInitFlag=1;
+			RemoteDataPortTemp.PitchIncrement	=		0;
+	RemoteDataPortTemp.YawIncrement		=	0;
+		 RemoteLostCount=0;
+				RemoteDataPortTemp.Friction=DISABLE;
+		RemoteDataPortTemp.FeedMotor=DISABLE;
 
-//			break;
-//		default:
-//			break;
-//	}
+			break;
+		case 3:
+//			RemoteDataPortTemp.Friction=ENABLE;
+//					RemoteDataPortTemp.FeedMotor=DISABLE;
+	
+
+			break;
+		default:
+			break;
+	}
 	RemoteDataPortTemp.Laser=RemoteDataPortTemp.Friction;
 	
 	return RemoteDataPortTemp;
@@ -523,7 +536,8 @@ RemoteDataPortStruct RemoteDataCalculate(RemoteDataProcessedStruct	RemoteDataRec
 		case	AUTO_MODE:
 			RemoteDataPortTemp	=	AutoModeProcessData(RemoteDataReceive);
 			AutomaticAiming=1;
-		
+			break;
+		default:
 			break;
 	}
 	
@@ -616,8 +630,6 @@ u8 RemoteTaskControl()
 		RemoteDataPortProcessed(RemoteDataPort);
 		return 0;
 	}
-	
-
 	return 1;
 }
 extern LobotServoData LServo;
@@ -626,7 +638,7 @@ void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 {
 	if (RemoteDataPort.Friction)
 	{
-		LL_TIM_OC_SetCompareCH2(TIM5,2550);//舵机开
+		LL_TIM_OC_SetCompareCH2(TIM5,2750);//舵机开
 		if (RemoteDataPort.FeedMotor)
 			{
 				LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM+PWMON);//开
@@ -638,7 +650,18 @@ void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 	}
 		else
 	{
-			LL_TIM_OC_SetCompareCH2(TIM5,2950);//舵机关
+			LL_TIM_OC_SetCompareCH2(TIM5,3070);//舵机关
 			LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM);//电机关
+	}
+}
+void RemoteClose()
+{
+	if (RemoteControlMode)
+	{
+		RemoteDataProcessedStruct	RemoteDataReceive={0};
+		RemoteDataReceive.LeftSwitch=RemoteControlMode;
+		RemoteDataReceive.Channel_0=RemoteDataReceive.Channel_1=RemoteDataReceive.Channel_2=RemoteDataReceive.Channel_3=0;
+		RemoteDataPort	=	RemoteDataCalculate(RemoteDataReceive);
+		RemoteDataPortProcessed(RemoteDataPort);
 	}
 }

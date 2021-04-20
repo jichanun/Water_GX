@@ -86,6 +86,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 GyroscopeStruct Gyroscope;
+int FlagRemoteReceive=0;
 
 /* USER CODE END PD */
 
@@ -208,7 +209,7 @@ void LEDTask(void const * argument)
 
   /* USER CODE BEGIN LEDTask */
 	 LaserInit();
-	LL_TIM_OC_SetCompareCH2(TIM5,2950);//舵机关
+	LL_TIM_OC_SetCompareCH2(TIM5,3070);//舵机关
   /* Infinite loop */
 	 for(;;)
   {
@@ -226,6 +227,8 @@ void LEDTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
+extern  int DEEPLostCount;
+
 /* USER CODE END Header_FeedMotorTask */
 void FeedMotorTask(void const * argument)
 {
@@ -236,6 +239,8 @@ void FeedMotorTask(void const * argument)
   {		
 		//TriggerControl();//扳机控制
     //FeedMotorControlLogic();//拉线电机控制
+		if (!DEEPLostCount)
+					RemoteClose();
     osDelay(4);
   }
   /* USER CODE END FeedMotorTask */
@@ -248,6 +253,7 @@ void FeedMotorTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_RemoteTask */
+
 void RemoteTask(void const * argument)
 {
   /* USER CODE BEGIN RemoteTask */
@@ -256,17 +262,26 @@ void RemoteTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-		event = osSignalWait(REMOTE_UART_RX_SIGNAL,osWaitForever);
-		if(event.status==osEventSignal)									
+//		event = osSignalWait(REMOTE_UART_RX_SIGNAL,osWaitForever);
+//		if(event.status==osEventSignal)									
+//		{
+//			if(event.value.signals & REMOTE_UART_RX_SIGNAL)//收到遥控器信号量
+//			{
+//         if(!RemoteTaskControl())
+//			 {
+//				 LostCounterFeed(REMOTE_LOST_COUNT);
+//			 }
+//			}
+//		}
+		if(FlagRemoteReceive==1)
 		{
-			if(event.value.signals & REMOTE_UART_RX_SIGNAL)//收到遥控器信号量
+					if(!RemoteTaskControl())
 			{
-         if(!RemoteTaskControl())
-			 {
 				 LostCounterFeed(REMOTE_LOST_COUNT);
-			 }
 			}
+			FlagRemoteReceive=0;
 		}
+		osDelay(2);
   }
   /* USER CODE END RemoteTask */
 }
@@ -362,6 +377,8 @@ void ChassisTask(void const * argument)
 void DMAUsart1DataFinishedHandle(void)
 {
 	osSignalSet(Remote_TaskHandle,REMOTE_UART_RX_SIGNAL);
+		FlagRemoteReceive=1;
+
 }
 
 
