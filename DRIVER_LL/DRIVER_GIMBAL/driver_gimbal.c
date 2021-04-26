@@ -102,7 +102,7 @@
 #define VISION_YAW_AP (0.0)
 #define VISION_YAW_BP (0)
 #define VISION_YAW_CP (0)
-#if 0
+#if 1
 	#define VISION_YAW_OFFSET (-4)
 	#define VISION_RHO_OFFSET (20)
 #else 
@@ -430,10 +430,38 @@ int RollSinkControl=0;
 extern  float yaw_OFFSET;
 float SinkPara=7;
 extern u8 AutomaticAiming;
+float GyroMax=0;
+extern int RollSinkPlus;
+//////////////////////////////////////////////////////////////////////////
+int RollSinkError=-20;//开环调这里
+////////////////////////////////////////////////////////////////////////////
+extern GimbalSetLocationStruct	GimbalSetLocationDataTemp;
 void GimbalControlCalculateAndSend(void)
 {
 	u8 Can2GimbalSendMessege[8];
+#if 1//异常左转识别程序
+	
+	if (GyroMax>YawMotor.Location.Location)
+		GyroMax=YawMotor.Location.Location;
+	if (GyroMax-YawMotor.Location.SetLocation<-0.05)
+	{
+		if(GyroMax-yaw_OFFSET<=-0.375){
+			GimbalSetLocationDataTemp.YawSetLocation=yaw_OFFSET-0.5;
+			GyroMax=GimbalSetLocationDataTemp.YawSetLocation;
+		}
+		else if (GyroMax-yaw_OFFSET<=-0.175)
+		{
+			GimbalSetLocationDataTemp.YawSetLocation=yaw_OFFSET-0.25;
+			GyroMax=GimbalSetLocationDataTemp.YawSetLocation;
+		}
+		else 
+		{
+			GimbalSetLocationDataTemp.YawSetLocation=yaw_OFFSET;
+			GyroMax=GimbalSetLocationDataTemp.YawSetLocation;
+		}
+	}
 
+#endif
 	YawMotor.PIDLocation.Ref	=	YawMotor.Location.SetLocation;
 	YawMotor.PIDLocation.Fdb	=	YawMotor.Location.Location;
 	YawMotor.PIDLocation.calc(&YawMotor.PIDLocation);
@@ -464,14 +492,18 @@ void GimbalControlCalculateAndSend(void)
 	RollMotor.PIDSpeed.calc(&RollMotor.PIDSpeed);
 	
 	RollMotor.RollError=RollMotor.PIDSpeed.Out*MAX_PWM;
-	
-	if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.35&&AutomaticAiming)
-		RollSinkControl=VisionData.error_x*(-SinkPara);
+/////////////////////////////////如果一直下沉就取消这个if
+	 if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.35&&AutomaticAiming&&VisionData.error_x!=20)
+	 {
+		 RollSinkControl=VisionData.error_x*(-SinkPara);
+//	else if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.2&&AutomaticAiming&&VisionData.error_x!=20)
+//		RollSinkControl=VisionData.error_x*(-SinkPara/2);
+	 }
 	else 
-		RollSinkControl=0;
+		RollSinkControl=RollSinkError;//开环调这里
 
 	RollMotor.RollSink=RemoteDataPort.PitchIncrement*MAX_PWM*GimbalSpeedK+RollSinkControl;//下沉不经过PID故使用K参数
-	
+
 	/************roll的发送放在这里**************/
 #if 1 //启用关控保护
 	if (!RemoteLostCount)

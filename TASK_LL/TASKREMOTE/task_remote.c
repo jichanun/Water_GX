@@ -447,6 +447,7 @@ RemoteDataPortStruct AutoModeProcessData(RemoteDataProcessedStruct	RemoteDataRec
 extern VisionDataStruct VisionData;
   int  ReceiveCount=0;
 extern  int RemoteLostCount;
+int RollSinkPlus=0;
 RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataReceive)
 {
 	static  int  ReceiveCount=0;
@@ -462,28 +463,30 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	
 	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
 	if (RollSinkControl<-20)
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.2;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
 	if (VisionData.statusfinal!='N')
 	{
 		ReceiveCount++;
+		RollSinkPlus=0;
 	}
 	if (ReceiveCount>20)
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.Friction=ENABLE;
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.7;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
 	}
 	if (ReceiveCount>100)
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.FeedMotor=ENABLE;
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
 	}
-	if (ReceiveCount>500)
+	if (ReceiveCount>2500)
 	{
 		ReceiveCount=0;
 		RemoteDataPortTemp.Friction=DISABLE;
 		RemoteDataPortTemp.FeedMotor=DISABLE;
+		RollSinkPlus=0;
 	}
 	switch(RemoteDataReceive.RightSwitch)
 	{
@@ -501,7 +504,7 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 		 RemoteLostCount=0;
 				RemoteDataPortTemp.Friction=DISABLE;
 		RemoteDataPortTemp.FeedMotor=DISABLE;
-
+		RollSinkPlus=0;
 			break;
 		case 3:
 //			RemoteDataPortTemp.Friction=ENABLE;
@@ -633,12 +636,12 @@ u8 RemoteTaskControl()
 	return 1;
 }
 extern LobotServoData LServo;
-int  PWMON=100;
+int  PWMON=150;
 void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 {
 	if (RemoteDataPort.Friction)
 	{
-		LL_TIM_OC_SetCompareCH2(TIM5,2750);//舵机开
+		LL_TIM_OC_SetCompareCH2(TIM5,2800);//舵机开
 		if (RemoteDataPort.FeedMotor)
 			{
 				LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM+PWMON);//开
@@ -650,7 +653,7 @@ void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 	}
 		else
 	{
-			LL_TIM_OC_SetCompareCH2(TIM5,3070);//舵机关
+			LL_TIM_OC_SetCompareCH2(TIM5,3150);//舵机关
 			LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM);//电机关
 	}
 }

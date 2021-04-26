@@ -209,11 +209,12 @@ void LEDTask(void const * argument)
 
   /* USER CODE BEGIN LEDTask */
 	 LaserInit();
-	LL_TIM_OC_SetCompareCH2(TIM5,3070);//舵机关
+	LL_TIM_OC_SetCompareCH2(TIM5,3150);//舵机关
   /* Infinite loop */
 	 for(;;)
   {
 		LED0=!LED0;
+		LED1=1;
 		LEDControl(VisionData.statusfinal);			
 		LL_TIM_OC_SetCompareCH1(TIM5,PWM51);//300左550中700右
     osDelay(500);

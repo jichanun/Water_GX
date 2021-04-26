@@ -21,6 +21,8 @@ extern u8 VisionReceiveFlag;
 extern  GimbalMotorStruct	YawMotor,PitchMotor,RollMotor;
 extern float VisionRho;
 extern u8 AutomaticAiming;
+extern float GyroMax;
+
 //换弹电机控制标志位
 int flag_init=0; //换弹电机初始化标志位
 //Switch.Reload1 换弹标志位
@@ -58,6 +60,7 @@ void GimbalControlTask()
 		GimbalSetLocationDataTemp.FlagYawUseEncoder	=	0;
 		yaw_OFFSET =Gyroscope.yaw/360;
 		GimbalSetLocationDataTemp.YawSetLocation	=	yaw_OFFSET;//使用陀螺仪则取消注释
+		GyroMax=yaw_OFFSET;
 
 	}
 	if (VisionReceiveFlag)
@@ -197,7 +200,10 @@ void VisionControl(void)
 //						YawSetLocationValueChange(-0.25);
 //						TurnFlag=60;
 //					}
-//					else 
+//					else
+#if 0		//////////////转两次之后就不管视觉			
+					if (YawMotor.Location.SetLocation-yaw_OFFSET>-0.5)
+#endif
 					{
 						YawSetLocationValueChange(-VisionData.change_angle);
 						if (TurnFlag>-10)
