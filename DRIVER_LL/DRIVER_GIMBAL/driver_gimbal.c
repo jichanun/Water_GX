@@ -89,7 +89,7 @@
 #define VISION_YAW_BP (0)
 #define VISION_YAW_CP (1)
 #else 
-#define VISION_RHO_KP (-2)
+#define VISION_RHO_KP (-8)
 #define VISION_RHO_KI (0.0)
 #define VISION_RHO_KD (5.0)
 #define VISION_RHO_AP (0.0)
@@ -103,7 +103,7 @@
 #define VISION_YAW_BP (0)
 #define VISION_YAW_CP (0)
 #if 1
-	#define VISION_YAW_OFFSET (-4)
+	#define VISION_YAW_OFFSET (-3)
 	#define VISION_RHO_OFFSET (20)
 #else 
 	#define VISION_YAW_OFFSET (0)
@@ -439,7 +439,7 @@ extern GimbalSetLocationStruct	GimbalSetLocationDataTemp;
 void GimbalControlCalculateAndSend(void)
 {
 	u8 Can2GimbalSendMessege[8];
-#if 1//异常左转识别程序
+#if 0//异常左转识别程序
 	
 	if (GyroMax>YawMotor.Location.Location)
 		GyroMax=YawMotor.Location.Location;
@@ -514,8 +514,8 @@ void GimbalControlCalculateAndSend(void)
 	else 
 	{
 		#if CONFIG_USE_GYROSCOPE
-			LL_TIM_OC_SetCompareCH1(TIM12,MIDDLE_PWM-RollMotor.RollError+RollMotor.RollSink);
-			LL_TIM_OC_SetCompareCH2(TIM12,MIDDLE_PWM+RollMotor.RollError+RollMotor.RollSink);
+			LL_TIM_OC_SetCompareCH1(TIM12,MIDDLE_PWM-RollMotor.RollError-RollMotor.RollSink);
+			LL_TIM_OC_SetCompareCH2(TIM12,MIDDLE_PWM+RollMotor.RollError-RollMotor.RollSink);
 		#else
 			LL_TIM_OC_SetCompareCH1(TIM12,MIDDLE_PWM+RollMotor.RollSink);
 			LL_TIM_OC_SetCompareCH2(TIM12,MIDDLE_PWM+RollMotor.RollSink);

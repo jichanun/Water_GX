@@ -461,9 +461,10 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	RockerDataConvert(&(RemoteDataPortTemp.ChassisSpeedX),&(RemoteDataPortTemp.ChassisSpeedY));
 	
 	
-	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
+	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
 	if (RollSinkControl<-20)
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.5;
+#if  0 //回收
 	if (VisionData.statusfinal!='N')
 	{
 		ReceiveCount++;
@@ -488,6 +489,7 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 		RemoteDataPortTemp.FeedMotor=DISABLE;
 		RollSinkPlus=0;
 	}
+#endif
 	switch(RemoteDataReceive.RightSwitch)
 	{
 		case 1:
@@ -636,7 +638,7 @@ u8 RemoteTaskControl()
 	return 1;
 }
 extern LobotServoData LServo;
-int  PWMON=150;
+int  PWMON=30;
 void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 {
 	if (RemoteDataPort.Friction)

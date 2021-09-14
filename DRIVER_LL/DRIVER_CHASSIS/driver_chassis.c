@@ -203,14 +203,14 @@ void ChassisControl_PWM(ChassisSpeedMessegePort ChassisSpeed)
 			ChassisMotor[i].Speed.SetSpeed=ChassisSpeedMax;
 		else if (ChassisMotor[i].Speed.SetSpeed<-ChassisSpeedMax)
 			ChassisMotor[i].Speed.SetSpeed=-ChassisSpeedMax;
-		if (i==1||i==2)
-		{
-			if (ChassisMotor[i].Speed.SetSpeed<0)
-				ChassisMotor[i].Speed.SetSpeed*=ReverseError;//反转倍率
-		}
-		else 
-			if (ChassisMotor[i].Speed.SetSpeed>0)
-				ChassisMotor[i].Speed.SetSpeed*=ReverseError;//反转倍率
+//		if (i==1||i==2)
+//		{
+//			if (ChassisMotor[i].Speed.SetSpeed<0)
+//				ChassisMotor[i].Speed.SetSpeed*=ReverseError;//反转倍率
+//		}
+//		else 
+//			if (ChassisMotor[i].Speed.SetSpeed>0)
+//				ChassisMotor[i].Speed.SetSpeed*=ReverseError;//反转倍率
 	}
 	
 #if 1 //启用关控保护
@@ -223,14 +223,14 @@ void ChassisControl_PWM(ChassisSpeedMessegePort ChassisSpeed)
 	}	
 	else 
 	{		
-		speed0=(s16)((ChassisMotor[0].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
-		speed1=(s16)((ChassisMotor[1].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
-		speed2=(s16)((ChassisMotor[2].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
-		speed3=(s16)((ChassisMotor[3].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
+		speed0=(s16)((-ChassisMotor[0].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
+		speed1=(s16)((-ChassisMotor[1].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
+		speed2=(s16)((-ChassisMotor[2].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
+		speed3=(s16)((-ChassisMotor[3].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
 		LL_TIM_OC_SetCompareCH1(TIM2,speed3);
 		LL_TIM_OC_SetCompareCH2(TIM2,speed2);
-		LL_TIM_OC_SetCompareCH3(TIM8,speed0);
-		LL_TIM_OC_SetCompareCH4(TIM8,speed1);
+		LL_TIM_OC_SetCompareCH3(TIM8,speed1);
+		LL_TIM_OC_SetCompareCH4(TIM8,speed0);
 	}
 	#else  //关闭关控保护
 		speed0=(u16)((ChassisMotor[0].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
