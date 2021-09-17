@@ -57,7 +57,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-char  TIM5CH1_CAPTURE_STA=0; //输入捕获状态 
+char  TIM5CH1_CAPTURE_STA=0; //输入捕获状�?? 
 int   TIM5CH1_CAPTURE_VAL;
 /* USER CODE END PV */
 
@@ -82,7 +82,7 @@ extern CAN_HandleTypeDef hcan2;
 extern TIM_HandleTypeDef htim7;
 
 /* USER CODE BEGIN EV */
-extern SemaphoreHandle_t xSemaphore;//wifi的二值信号
+extern SemaphoreHandle_t xSemaphore;//wifi的二值信�?
 u8 VisionReceiveFlag=0;
 
 /* USER CODE END EV */
@@ -210,7 +210,7 @@ void DMA1_Stream1_IRQHandler(void)
 void DMA1_Stream3_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream3_IRQn 0 */
-	LL_DMA_ClearFlag_TC3(DMA1);                 //串口3发送
+	LL_DMA_ClearFlag_TC3(DMA1);                 //串口3发�??
 	LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_3);
 
   /* USER CODE END DMA1_Stream3_IRQn 0 */
@@ -226,7 +226,7 @@ void DMA1_Stream3_IRQHandler(void)
 void DMA1_Stream4_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream4_IRQn 0 */
-	LL_DMA_ClearFlag_TC4(DMA1);                 //串口3发送
+	LL_DMA_ClearFlag_TC4(DMA1);                 //串口3发�??
 	LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_4);
 
   /* USER CODE END DMA1_Stream4_IRQn 0 */
@@ -257,7 +257,7 @@ void DMA1_Stream5_IRQHandler(void)
 void DMA1_Stream6_IRQHandler(void)
 {
   /* USER CODE BEGIN DMA1_Stream6_IRQn 0 */
-	LL_DMA_ClearFlag_TC6(DMA1);                 //发送串口2
+	LL_DMA_ClearFlag_TC6(DMA1);                 //发�?�串�?2
 	LL_DMA_DisableStream(DMA1, LL_DMA_STREAM_6);
 
   /* USER CODE END DMA1_Stream6_IRQn 0 */
@@ -373,6 +373,20 @@ void DMA2_Stream1_IRQHandler(void)
 	}
 	LL_DMA_ClearFlag_HT1(DMA2);
 	LL_DMA_ClearFlag_TC1(DMA2);
+  /* USER CODE END DMA2_Stream1_IRQn 1 */
+}void DMA2_Stream6_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA2_Stream1_IRQn 0 */
+
+  /* USER CODE END DMA2_Stream1_IRQn 0 */
+  
+  /* USER CODE BEGIN DMA2_Stream1_IRQn 1 */
+  if (LL_DMA_IsActiveFlag_TC6(DMA2))
+	{
+		//DMAUsart6DataFinishedHandle();
+	}
+	LL_DMA_ClearFlag_HT6(DMA2);
+	LL_DMA_ClearFlag_TC6(DMA2);
   /* USER CODE END DMA2_Stream1_IRQn 1 */
 }
 

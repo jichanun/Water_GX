@@ -195,7 +195,7 @@ void MX_FREERTOS_Init(void) {
 
 
 extern u8 init_Wifi_flag;
-SemaphoreHandle_t xSemaphore;//wifi的二值信号
+SemaphoreHandle_t xSemaphore;//wifi的二值信�?
 int code;
 int PWM42=0;
 int PWM51=0;
@@ -209,14 +209,14 @@ void LEDTask(void const * argument)
 
   /* USER CODE BEGIN LEDTask */
 	 LaserInit();
-	LL_TIM_OC_SetCompareCH2(TIM5,3150);//舵机关
+	LL_TIM_OC_SetCompareCH2(TIM5,3150);//舵机�?
   /* Infinite loop */
 	 for(;;)
   {
 		LED0=!LED0;
 		LED1=1;
-		LEDControl(VisionData.statusfinal);	//灯的线序橙黄绿		
-		LL_TIM_OC_SetCompareCH1(TIM5,PWM51);//300左550中700右
+		LEDControl(VisionData.statusfinal);	//灯的线序橙黄�?		
+		LL_TIM_OC_SetCompareCH1(TIM5,PWM51);//300�?550�?700�?
     osDelay(500);
   }
   /* USER CODE END LEDTask */
@@ -254,7 +254,6 @@ void FeedMotorTask(void const * argument)
 * @retval None
 */
 /* USER CODE END Header_RemoteTask */
-
 void RemoteTask(void const * argument)
 {
   /* USER CODE BEGIN RemoteTask */
@@ -325,7 +324,7 @@ void GimbalTask(void const * argument)
   for(;;)
   {
 		//StraightLineMotorControl();//直线电机控制
-		GimbalControlTask();//Yaw和拨弹电机控制
+		GimbalControlTask();//Yaw和拨弹电机控�?
     osDelay(1);
   }
   /* USER CODE END GimbalTask */
@@ -337,9 +336,9 @@ void GimbalTask(void const * argument)
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_GraspTask */
 extern LobotServoData LServo;
 
+/* USER CODE END Header_GraspTask */
 void GraspTask(void const * argument)
 {
   /* USER CODE BEGIN GraspTask */

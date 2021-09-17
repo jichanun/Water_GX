@@ -140,7 +140,7 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN 0 */
 u8 UART3BUFF[20];
 #define NUM 8
-#define LENTH (NUM*24+240)//后100个
+#define LENTH (NUM*24+240)//�?100�?
 extern u32 data1[LENTH];
 
 /* USER CODE END 0 */
@@ -197,7 +197,7 @@ int main(void)
   //GPIO_Config();
   //UserTim1Config();
   
-	//这行以下5个都要删掉注释
+	//这行以下5个都要删掉注�?
   CanInit();
   ChassisInit();
   GimbalInit();

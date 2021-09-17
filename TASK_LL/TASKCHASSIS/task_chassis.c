@@ -34,7 +34,7 @@ void Chassis_Init(void)
 	LL_TIM_EnableCounter(TIM2);
 	LL_TIM_EnableAllOutputs(TIM2);
 	//PWMNum=0;
-	LL_TIM_OC_SetCompareCH1(TIM2,PWMNum);
+	LL_TIM_OC_SetCompareCH1(TIM1,PWMNum);
 	LL_TIM_OC_SetCompareCH2(TIM2,PWMNum);
 	LL_TIM_OC_SetCompareCH3(TIM8,PWMNum);
 	LL_TIM_OC_SetCompareCH4(TIM8,PWMNum);
@@ -47,7 +47,7 @@ void Chassis_Init(void)
 void Chassis_Control(void)
 {
 	#if  0  ///*********************调试接口
-	LL_TIM_OC_SetCompareCH1(TIM2,PWMNum);
+	LL_TIM_OC_SetCompareCH1(TIM1,PWMNum);
 	LL_TIM_OC_SetCompareCH2(TIM2,PWMNum);
 	LL_TIM_OC_SetCompareCH3(TIM8,PWMNum);
 	LL_TIM_OC_SetCompareCH4(TIM8,PWMNum);

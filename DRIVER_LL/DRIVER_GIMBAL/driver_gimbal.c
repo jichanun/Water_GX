@@ -203,6 +203,11 @@ void GimbalInit(void)
 	LL_TIM_EnableCounter(TIM5);
 	LL_TIM_EnableAllOutputs(TIM5);
 	
+	LL_TIM_CC_EnableChannel(TIM1,LL_TIM_CHANNEL_CH1);
+	LL_TIM_EnableCounter(TIM1);
+	LL_TIM_EnableAllOutputs(TIM1);
+
+	
 }
 void VisionInit(void)
 {
@@ -428,12 +433,12 @@ extern  int RemoteLostCount;
 extern RemoteDataPortStruct	RemoteDataPort;
 int RollSinkControl=0;
 extern  float yaw_OFFSET;
-float SinkPara=7;
+float SinkPara=3;
 extern u8 AutomaticAiming;
 float GyroMax=0;
 extern int RollSinkPlus;
 //////////////////////////////////////////////////////////////////////////
-int RollSinkError=-20;//开环调这里
+int RollSinkError=-40;//开环调这里
 ////////////////////////////////////////////////////////////////////////////
 extern GimbalSetLocationStruct	GimbalSetLocationDataTemp;
 void GimbalControlCalculateAndSend(void)
@@ -495,12 +500,12 @@ void GimbalControlCalculateAndSend(void)
 /////////////////////////////////如果一直下沉就取消这个if
 	 if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.35&&AutomaticAiming&&VisionData.error_x!=20)
 	 {
-		 RollSinkControl=VisionData.error_x*(-SinkPara);
+		 RollSinkControl=(VisionData.error_x+55)*(-SinkPara)+RollSinkError;
 //	else if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.2&&AutomaticAiming&&VisionData.error_x!=20)
 //		RollSinkControl=VisionData.error_x*(-SinkPara/2);
 	 }
 	else 
-		RollSinkControl=RollSinkError;//开环调这里
+		 RollSinkControl=(VisionData.error_x+55)*(-SinkPara)+RollSinkError;
 
 	RollMotor.RollSink=RemoteDataPort.PitchIncrement*MAX_PWM*GimbalSpeedK+RollSinkControl;//下沉不经过PID故使用K参数
 

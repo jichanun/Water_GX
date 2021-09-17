@@ -216,18 +216,19 @@ void ChassisControl_PWM(ChassisSpeedMessegePort ChassisSpeed)
 #if 1 //启用关控保护
 	if (!RemoteLostCount)
 	{
-		LL_TIM_OC_SetCompareCH1(TIM2,MIDDLE_PWM);
+		LL_TIM_OC_SetCompareCH1(TIM1,MIDDLE_PWM);
 		LL_TIM_OC_SetCompareCH2(TIM2,MIDDLE_PWM);
+		LL_TIM_OC_SetCompareCH1(TIM5,MIDDLE_PWM);
 		LL_TIM_OC_SetCompareCH3(TIM8,MIDDLE_PWM);
 		LL_TIM_OC_SetCompareCH4(TIM8,MIDDLE_PWM);
 	}	
 	else 
 	{		
 		speed0=(s16)((-ChassisMotor[0].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
-		speed1=(s16)((-ChassisMotor[1].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
+		speed1=(s16)((ChassisMotor[1].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
 		speed2=(s16)((-ChassisMotor[2].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
 		speed3=(s16)((-ChassisMotor[3].Speed.SetSpeed*ChassisSpeedK)+MIDDLE_PWM);
-		LL_TIM_OC_SetCompareCH1(TIM2,speed3);
+		LL_TIM_OC_SetCompareCH1(TIM1,speed3);
 		LL_TIM_OC_SetCompareCH2(TIM2,speed2);
 		LL_TIM_OC_SetCompareCH3(TIM8,speed1);
 		LL_TIM_OC_SetCompareCH4(TIM8,speed0);

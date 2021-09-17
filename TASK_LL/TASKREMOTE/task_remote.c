@@ -461,10 +461,10 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	RockerDataConvert(&(RemoteDataPortTemp.ChassisSpeedX),&(RemoteDataPortTemp.ChassisSpeedY));
 	
 	
-	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
+	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.15;
 	if (RollSinkControl<-20)
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.5;
-#if  0 //回收
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.2;
+#if  1 //回收
 	if (VisionData.statusfinal!='N')
 	{
 		ReceiveCount++;
@@ -638,7 +638,7 @@ u8 RemoteTaskControl()
 	return 1;
 }
 extern LobotServoData LServo;
-int  PWMON=30;
+int  PWMON=150;
 void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 {
 	if (RemoteDataPort.Friction)
@@ -646,17 +646,17 @@ void CAN1Control(RemoteDataPortStruct RemoteDataPort)
 		LL_TIM_OC_SetCompareCH2(TIM5,2800);//舵机开
 		if (RemoteDataPort.FeedMotor)
 			{
-				LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM+PWMON);//开
+				LL_TIM_OC_SetCompareCH1(TIM5,MIDDLE_PWM+PWMON);//开
 			}
 			else 
 			{
-				LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM);//关
+				LL_TIM_OC_SetCompareCH1(TIM5,MIDDLE_PWM);//关
 			}		
 	}
 		else
 	{
 			LL_TIM_OC_SetCompareCH2(TIM5,3150);//舵机关
-			LL_TIM_OC_SetCompareCH2(TIM4,MIDDLE_PWM);//电机关
+			LL_TIM_OC_SetCompareCH1(TIM5,MIDDLE_PWM);//电机关
 	}
 }
 void RemoteClose()

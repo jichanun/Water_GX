@@ -122,7 +122,7 @@ void UART3Unpack(u8 *buff,u32 *num)
 }
 float FilterK=0.05;
 int16_t TurnFlag=0;
-int down_error=30;
+int down_error=-30;
 void VisionControl(void)
 {
 	VisionReceiveFlag=0;
