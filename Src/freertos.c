@@ -215,7 +215,7 @@ void LEDTask(void const * argument)
   {
 		LED0=!LED0;
 		LED1=1;
-		LEDControl(VisionData.statusfinal);	//灯的线序橙黄�?		
+		LEDControl(VisionData.statusfinal);	//灯的线序橙黄绿?		
 		LL_TIM_OC_SetCompareCH1(TIM5,PWM51);//300�?550�?700�?
     osDelay(500);
   }

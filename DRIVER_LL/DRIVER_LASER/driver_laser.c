@@ -18,7 +18,7 @@ void LEDControl(u8 judge)
 {
 	if (judge=='C')
 	{
-		    osDelay(1500);
+		    osDelay(2000);
 		for (int j =0;j<6;j++)
 		{
 				if (j%2)
@@ -41,8 +41,8 @@ void LEDControl(u8 judge)
 	}
 	else if (judge=='S')
 	{
-		    osDelay(1500);
-		for (int j =0;j<6;j++)
+		    osDelay(2000);
+		for (int j =0;j<8;j++)
 		{
 				if (j%2)
 				for(int i=0;i<NUM;i++)
@@ -61,12 +61,12 @@ void LEDControl(u8 judge)
 					}
 				}
 				LED_setdata();
-				osDelay(200);
+				osDelay(300);
 		}
 	}
 	else if (judge=='R')
 	{
-		    osDelay(1500);
+		    osDelay(2000);
 		for (int j =0;j<6;j++)
 		{
 				if (j%2)
@@ -86,7 +86,7 @@ void LEDControl(u8 judge)
 					}
 				}
 				LED_setdata();
-				osDelay(200);
+				osDelay(300);
 		}
 	}
 	else 

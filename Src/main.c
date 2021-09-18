@@ -206,6 +206,7 @@ int main(void)
 	//WifiInit("192.168.1.113",8888,"RoboMaster2","bufujiugan",USART3);
 	ConfigUsart3DMA((u32)UART3BUFF,19);
 	ConfigTIM3DMA((u32)data1,LENTH);
+	//ConfigTIM1DMA((u32)data1,LENTH);
   LostCounterInit();
   WatchDogInit();
 	

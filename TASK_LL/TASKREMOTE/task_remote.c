@@ -461,9 +461,9 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	RockerDataConvert(&(RemoteDataPortTemp.ChassisSpeedX),&(RemoteDataPortTemp.ChassisSpeedY));
 	
 	
-	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.15;
+	RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
 	if (RollSinkControl<-20)
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.2;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.4;
 #if  1 //回收
 	if (VisionData.statusfinal!='N')
 	{
@@ -474,22 +474,45 @@ RemoteDataPortStruct AutoModeProcessData1(RemoteDataProcessedStruct	RemoteDataRe
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.Friction=ENABLE;
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.5;
 	}
 	if (ReceiveCount>100)
 	{
 		ReceiveCount++;
 		RemoteDataPortTemp.FeedMotor=ENABLE;
-			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.1;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.3;
 	}
-	if (ReceiveCount>2500)
+	if (ReceiveCount>500)
 	{
 		ReceiveCount=0;
 		RemoteDataPortTemp.Friction=DISABLE;
 		RemoteDataPortTemp.FeedMotor=DISABLE;
 		RollSinkPlus=0;
 	}
-#endif
+
+	
+	
+		if (ReceiveCount>1000)
+	{
+		ReceiveCount++;
+		RemoteDataPortTemp.Friction=ENABLE;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.5;
+	}
+	if (ReceiveCount>1100)
+	{
+		ReceiveCount++;
+		RemoteDataPortTemp.FeedMotor=ENABLE;
+			RemoteDataPortTemp.ChassisSpeedY	=		RemoteDataReceive.Channel_3+0.5;
+	}
+	if (ReceiveCount>1500)
+	{
+		ReceiveCount=0;
+		RemoteDataPortTemp.Friction=DISABLE;
+		RemoteDataPortTemp.FeedMotor=DISABLE;
+		RollSinkPlus=0;
+	}
+
+	#endif
 	switch(RemoteDataReceive.RightSwitch)
 	{
 		case 1:

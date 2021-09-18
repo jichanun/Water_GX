@@ -433,12 +433,12 @@ extern  int RemoteLostCount;
 extern RemoteDataPortStruct	RemoteDataPort;
 int RollSinkControl=0;
 extern  float yaw_OFFSET;
-float SinkPara=3;
+float SinkPara=8;
 extern u8 AutomaticAiming;
 float GyroMax=0;
 extern int RollSinkPlus;
 //////////////////////////////////////////////////////////////////////////
-int RollSinkError=-40;//开环调这里
+int RollSinkError=-60;//开环调这里
 ////////////////////////////////////////////////////////////////////////////
 extern GimbalSetLocationStruct	GimbalSetLocationDataTemp;
 void GimbalControlCalculateAndSend(void)
@@ -500,7 +500,7 @@ void GimbalControlCalculateAndSend(void)
 /////////////////////////////////如果一直下沉就取消这个if
 	 if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.35&&AutomaticAiming&&VisionData.error_x!=20)
 	 {
-		 RollSinkControl=(VisionData.error_x+55)*(-SinkPara)+RollSinkError;
+		 RollSinkControl=(VisionData.error_x+45)*(-SinkPara)+RollSinkError;
 //	else if (YawMotor.Location.SetLocation-yaw_OFFSET<-0.2&&AutomaticAiming&&VisionData.error_x!=20)
 //		RollSinkControl=VisionData.error_x*(-SinkPara/2);
 	 }

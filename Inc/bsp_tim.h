@@ -7,5 +7,6 @@ void UserTim3Config(void);
 void UserTim8Config(void);
 void ConfigTIM3DMA(u32 DMA_Memory0BaseAddr,u32 DMA_BufferSize);
 void TIM3ConfigEnable(void);
-
+void TIM1ConfigEnable(void);
+void ConfigTIM1DMA(u32 DMA_Memory0BaseAddr,u32 DMA_BufferSize);
 #endif
